@@ -6,38 +6,30 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 21:11:54 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/07 18:11:01 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/08 22:04:02 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	print_error(char *message)
+int	init_all(t_data *data)
 {
-	printf("Introduce right %s\n", message);
-	return (1);
-}
-
-int	ft_atoi_philo(char *str, int *arg)
-{
-	int	i;
-	int	x;
-
-	if (!str)
-	{
-		*arg = -1;
-		return (0);
-	}
-	i = 0;
-	x = 0;
-	while (str[i] && ((str[i] > 8 && str[i] < 14) || str[i] == 32))
-		i++;
-	while (str[i] && str[i] > 47 && str[i] < 58)
-		x = x * 10 + (str[i++] - 48);
-	if (str[i])
-		return (1);
-	*arg = x;
-	return (0);
+	data->phi = malloc(sizeof(t_philo) * (data->n_phis + 1));
+	if (!data->phi)
+		return (print_error("Allocation failed", data, -1));
+	memset(data->phi, NULL, sizeof(t_philo) * (data->n_phis + 1));
+	pthread_mutex_init(&data->mprint, NULL);
+	pthread_mutex_init(&data->mstart, NULL);
+	pthread_mutex_init(&data->mdied, NULL);
+	pthread_mutex_init(&data->mfinish, NULL);
+	data->threads = malloc(sizeof(t_philo) * (data->n_phis + 1));
+	if (!data->threads)
+		return (print_error("Allocation failed", data, -1));
+	pthread_mutex_lock(&data->mstart);
+	init_philos(data);
+	init_threads(data);
+	gettimeofday(&data->time, NULL);
+	pthread_mutex_unlock(&data->mstart);
 }
 
 int	parse_args(t_data *data, char **argv)
@@ -45,16 +37,20 @@ int	parse_args(t_data *data, char **argv)
 	int	i;
 
 	i = 1;
+	data->n_must_eat = -1;
+	data->phi = NULL;
+	data->threads = NULL;
 	if (ft_atoi_philo(argv[i++], &data->n_phis))
-		return (print_error("number of philosophers"));
+		return (print_error("Introduce right number of philosophers", data, -1));
 	if (ft_atoi_philo(argv[i++], &data->t_die))
-		return (print_error("time to die"));
+		return (print_error("Introduce right time to die", data, -1));
 	if (ft_atoi_philo(argv[i++], &data->t_eat))
-		return (print_error("time to eat"));
+		return (print_error("Introduce right time to eat", data, -1));
 	if (ft_atoi_philo(argv[i++], &data->t_sleep))
-		return (print_error("time to sleep"));
-	if (ft_atoi_philo(argv[i], &data->t_must_eat))
-		return (print_error("times each philosopher must eat"));
+		return (print_error("Introduce right time to sleep", data, -1));
+	if (argv[i] && ft_atoi_philo(argv[i], &data->n_must_eat))
+		return (print_error\
+		("Introduce right times each philosopher must eat", data, -1));
 }
 
 int	main(int argc, char **argv)
@@ -70,5 +66,10 @@ int	main(int argc, char **argv)
 	}
 	if (parse_args(&data, argv))
 		return (1);
-	
+	if (init_all(&data))
+		return (1);
+// monitor
+// join loop	
+	ft_clean(&data, data.n_phis);
+	return (0);
 }
