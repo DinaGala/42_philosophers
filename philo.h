@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 18:36:05 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/08 22:03:53 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/09 19:18:09 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,39 @@ typedef struct s_data
 	int				t_eat;
 	int				t_sleep;
 	int				n_must_eat;
-//	int				start;
+	int				t_start;
+	int				end;
+	int				eaten;
 	t_philo			*phi;
 	pthread_t		*threads;
-	struct timeval	time;
+	struct timeval	time; //?
 	pthread_mutex_t	mprint;
 	pthread_mutex_t	mstart;
 	pthread_mutex_t	mdied;
 	pthread_mutex_t	mfinish;
 }	t_data;
 
-/*********** philo.c - main *************/
+/*********** philo.c - main and initialization *************/
 int	parse_args(t_data *data, char **argv);
 int	init_all(t_data *data);
-//	init_philos(data);
-//	init_threads(data);
+void	init_philos(t_data *data);
+int	init_threads(t_data *data);
+/****************************************/
 
-/*********** utils.c - main *************/
+/*********** routine.c - main *************/
+int	routine(void *arg);
+
+/*********** time.c - main ***************/
+int	ft_time(void);
+void	ft_usleep(int millisec);
+void	ft_print(char *message, t_philo *phi);
+
+/*********** utils.c - additional functions *************/
 void	ft_putstr(char *str);
 int		ft_strlen(char *str);
 int		ft_atoi_philo(char *str, int *arg);
-int		print_error(char *message, t_data *data, int flag);
+int		error(char *message, t_data *data, int flag);
 void	ft_clean(t_data *data, int flag);
+/****************************************/
 
 #endif

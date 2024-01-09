@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 19:05:17 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/08 21:43:31 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/09 18:15:02 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	ft_atoi_philo(char *str, int *arg)
 
 /* If flag = -1 - we don't detach the threads, else - the amount of threads 
 to detach */
-int	print_error(char *message, t_data *data, int flag)
+int	error(char *message, t_data *data, int flag)
 {
 	if (message)
 	{
