@@ -6,16 +6,16 @@
 #    By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/05 17:30:59 by nzhuzhle          #+#    #+#              #
-#    Updated: 2024/01/05 21:11:41 by nzhuzhle         ###   ########.fr        #
+#    Updated: 2024/01/10 19:28:31 by nzhuzhle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 HEADER = philo.h
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -MMD -pthread -I ./ #-g -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -MMD -pthread -I ./ -g -fsanitize=thread
 
-SRCS = philo.c 
+SRCS = philo.c routine.c time.c utils.c
 
 OBJ = $(SRCS:.c=.o) 
 DEPS = $(SRCS:.c=.d)

@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 21:11:54 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/09 18:53:42 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/10 19:21:57 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	init_threads(t_data *data)
 	i = -1;
 	while (++i < data->n_phis)
 	{
-		if (pthread_create(data->threads[i], NULL, &routine, &data->phi[i]))
+		if (pthread_create(&data->threads[i], NULL, &routine, &data->phi[i]))
 			return (i);
 	}
 	return (-1);
@@ -35,7 +35,7 @@ void	init_philos(t_data *data)
 		data->phi[i].id = i + 1;
 		data->phi[i].left_eat = data->n_must_eat;
 		data->phi[i].eating = 0;
-		data->phi[i].t_death = data->t_die;
+		data->phi[i].t_die = data->t_die;
 		data->phi[i].data = data;
 		pthread_mutex_init(&data->phi[i].mr_fork, NULL);
 		pthread_mutex_init(&data->phi[i].m_t_die, NULL);
@@ -52,18 +52,17 @@ int	init_all(t_data *data)
 
 	data->end = 0;
 	data->eaten = 0;
-	data->phi = malloc(sizeof(t_philo) * (data->n_phis + 1));
+	data->phi = malloc(sizeof(t_philo) * data->n_phis);
 	if (!data->phi)
 		return (error("Allocation failed", data, -1));
-	memset(data->phi, NULL, sizeof(t_philo) * (data->n_phis + 1));
 	pthread_mutex_init(&data->mprint, NULL);
 	pthread_mutex_init(&data->mstart, NULL);
-	pthread_mutex_init(&data->mdied, NULL);
-	pthread_mutex_init(&data->mfinish, NULL);
+	pthread_mutex_init(&data->mend, NULL);
+	pthread_mutex_init(&data->meaten, NULL);
 	data->threads = malloc(sizeof(pthread_t) * (data->n_phis + 1));
 	if (!data->threads)
 		return (error("Allocation failed", data, -1));
-	memset(data->threads, NULL, sizeof(pthread_t) * (data->n_phis + 1));
+	memset(data->threads, 0, sizeof(pthread_t) * (data->n_phis + 1));
 	pthread_mutex_lock(&data->mstart);
 	init_philos(data);
 	check = init_threads(data);
@@ -94,6 +93,7 @@ int	parse_args(t_data *data, char **argv)
 	if (argv[i] && ft_atoi_philo(argv[i], &data->n_must_eat))
 		return (error("Introduce right times \
 		each philosopher must eat", data, -1));
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -112,7 +112,7 @@ int	main(int argc, char **argv)
 		return (1);
 	if (init_all(&data))
 		return (1);
-// monitor
+	monitor(&data);
 	i = -1;
 	while (++i < data.n_phis)
 	{

@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 18:36:05 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/09 19:18:09 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/10 19:22:18 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/time.h>
+# include <string.h>
 
 typedef struct s_data	t_data;
 typedef struct s_philo	t_philo;
@@ -27,7 +28,7 @@ typedef struct s_philo
 	int				id;
 	int				left_eat;
 	int				eating;
-	int				t_death;
+	int				t_die;
 	pthread_mutex_t	mr_fork;
 	pthread_mutex_t	*ml_fork;
 	pthread_mutex_t	m_t_die;
@@ -49,22 +50,27 @@ typedef struct s_data
 	struct timeval	time; //?
 	pthread_mutex_t	mprint;
 	pthread_mutex_t	mstart;
-	pthread_mutex_t	mdied;
-	pthread_mutex_t	mfinish;
+	pthread_mutex_t	mend;
+	pthread_mutex_t	meaten;
 }	t_data;
 
 /*********** philo.c - main and initialization *************/
-int	parse_args(t_data *data, char **argv);
-int	init_all(t_data *data);
+int		parse_args(t_data *data, char **argv);
+int		init_all(t_data *data);
 void	init_philos(t_data *data);
-int	init_threads(t_data *data);
+int		init_threads(t_data *data);
 /****************************************/
 
 /*********** routine.c - main *************/
-int	routine(void *arg);
+void	*routine(void *arg);
+void	*one_routine(t_philo *phi);
+void	many_routine(t_philo *phi);
+void	monitor(t_data *data);
+int		monitor_eaten(t_data *data);
+/****************************************/
 
 /*********** time.c - main ***************/
-int	ft_time(void);
+int		ft_time(void);
 void	ft_usleep(int millisec);
 void	ft_print(char *message, t_philo *phi);
 

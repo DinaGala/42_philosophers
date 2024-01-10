@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 19:05:17 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/09 18:15:02 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/10 19:24:05 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,13 @@ void	ft_clean(t_data *data, int flag)
 	}
 	pthread_mutex_destroy(&data->mprint);
 	pthread_mutex_destroy(&data->mstart);
-	pthread_mutex_destroy(&data->mdied);
-	pthread_mutex_destroy(&data->mfinish);
+	pthread_mutex_destroy(&data->mend);
+	pthread_mutex_destroy(&data->meaten);
 	free(data->phi);
 	data->phi = NULL;
 	i = -1;
-	while (data->threads && ++i < flag)
-		pthread_detach(&data->threads[i]);
+	while (data->threads && ++i < flag && data->threads[i])
+		pthread_detach(data->threads[i]);
 	if (data->threads)
 		free(data->threads);
 	data->threads = NULL;

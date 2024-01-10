@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 18:41:38 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/09 19:17:37 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/10 18:28:00 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	ft_print(char *message, t_philo *phi)
 	int	end;
 
 	time = ft_time() - phi->data->t_start;
-	pthread_mutex_lock(&phi->data->mfinish);
+	pthread_mutex_lock(&phi->data->mend);
 	end = phi->data->end;
-	pthread_mutex_unlock(&phi->data->mfinish);
+	pthread_mutex_unlock(&phi->data->mend);
 	if (end)
 		return ;
 	pthread_mutex_lock(&phi->data->mprint);
