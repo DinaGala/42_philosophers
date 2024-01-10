@@ -6,28 +6,11 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 19:05:17 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/10 19:24:05 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/10 20:25:13 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	ft_putstr(char *str)
-{
-	write(1, str, ft_strlen(str));
-}
-
-int	ft_strlen(char *str)
-{
-	int	cont;
-
-	cont = 0;
-	if (!str)
-		return (0);
-	while (str[cont] != '\0')
-		cont++;
-	return (cont);
-}
 
 int	ft_atoi_philo(char *str, int *arg)
 {
@@ -53,10 +36,7 @@ to detach */
 int	error(char *message, t_data *data, int flag)
 {
 	if (message)
-	{
-		ft_putstr(message);
-		write(1, "\n", 1);	
-	}
+		printf("%s\n", message);
 	if (data && data->phi)
 		ft_clean(data, flag);
 	if (!message)
@@ -88,4 +68,20 @@ void	ft_clean(t_data *data, int flag)
 	if (data->threads)
 		free(data->threads);
 	data->threads = NULL;
+}
+
+void	ft_print(char *message, t_philo *phi)
+{
+	int	time;
+	int	end;
+
+	time = ft_time() - phi->data->t_start;
+	pthread_mutex_lock(&phi->data->mend);
+	end = phi->data->end;
+	pthread_mutex_unlock(&phi->data->mend);
+	if (end)
+		return ;
+	pthread_mutex_lock(&phi->data->mprint);
+	printf("%i %i %s\n", time, phi->id, message);
+	pthread_mutex_unlock(&phi->data->mprint);
 }

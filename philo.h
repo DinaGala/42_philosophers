@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 18:36:05 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/10 19:22:18 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/10 20:24:55 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,12 @@ int		monitor_eaten(t_data *data);
 /*********** time.c - main ***************/
 int		ft_time(void);
 void	ft_usleep(int millisec);
-void	ft_print(char *message, t_philo *phi);
 
 /*********** utils.c - additional functions *************/
-void	ft_putstr(char *str);
-int		ft_strlen(char *str);
 int		ft_atoi_philo(char *str, int *arg);
 int		error(char *message, t_data *data, int flag);
 void	ft_clean(t_data *data, int flag);
+void	ft_print(char *message, t_philo *phi);
 /****************************************/
 
 #endif

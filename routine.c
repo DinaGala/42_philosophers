@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 18:05:16 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/10 19:48:10 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/10 20:23:18 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	*routine(void *arg)
 		many_routine(phi);
 		pthread_mutex_lock(&phi->data->mend);
 		end = phi->data->end;
-		printf("{ROUT} in routine end: %i\n", end); //erase
 		pthread_mutex_unlock(&phi->data->mend);
 	}
 	return ((void *)0);
@@ -64,12 +63,10 @@ void	many_routine(t_philo *phi)
 	ft_print("is eating", phi);
 	ft_usleep(phi->data->t_eat);
 	phi->left_eat--;
-	printf("{MANY ROUT} left eat: %i\n", phi->left_eat); //erase
 	if (phi->left_eat == 0)
 	{
 		pthread_mutex_lock(&phi->data->meaten);
 		phi->data->eaten++;
-		printf("{MANY ROUT} eaten: %i\n", phi->data->eaten); //erase
 		pthread_mutex_unlock(&phi->data->meaten);
 	}
 	phi->eating = 0;
@@ -83,18 +80,15 @@ void	many_routine(t_philo *phi)
 void	monitor(t_data *data)
 {
 	int	i;
-	int	aux;
+	int	time;
 
 	i = -1;
-	printf("{MONITOR} ENTERED MONITOR\n"); //erase
 	while (++i < data->n_phis)
 	{
-		printf("{MONITOR} ENTERED MONITOR\n"); //erase
 		pthread_mutex_lock(&data->phi[i].m_t_die);
-		aux = data->phi[i].t_die;
+		time = data->phi[i].t_die;
 		pthread_mutex_unlock(&data->phi[i].m_t_die);
-		printf("{MONITOR} AFTER FIRST MUTEX\n"); //erase
-		if (aux < (ft_time() - data->t_start))
+		if (time <= (ft_time() - data->t_start))
 		{
 			ft_print("died", &data->phi[i]);
 			pthread_mutex_lock(&data->mend);
@@ -102,10 +96,9 @@ void	monitor(t_data *data)
 			pthread_mutex_unlock(&data->mend);
 			break ;
 		}
-		printf("{MONITOR} AFTER SECOND MUTEX\n"); //erase
 		if (data->n_must_eat > 0 && monitor_eaten(data))
 			break ;
-		if (i == data->n_phis)
+		if (i == data->n_phis - 1)
 			i = -1;
 	}
 }
@@ -121,7 +114,6 @@ int	monitor_eaten(t_data *data)
 	{
 		pthread_mutex_lock(&data->mend);
 		data->end = 1;
-
 		pthread_mutex_unlock(&data->mend);
 		return (1);
 	}
