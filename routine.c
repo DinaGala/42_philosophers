@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 18:05:16 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/10 20:23:18 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/11 18:07:36 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	*routine(void *arg)
 void	*one_routine(t_philo *phi)
 {
 	pthread_mutex_lock(&phi->mr_fork);
-	ft_print("has taken a fork", phi);
+	ft_print("has taken a fork", phi, 0);
 	ft_usleep(phi->t_die);
-	ft_print("died", phi);
+	ft_print("died", phi, 1);
 	phi->data->end = 1;
 	pthread_mutex_unlock(&phi->mr_fork);
 	return ((void *)0);
@@ -54,13 +54,13 @@ void	many_routine(t_philo *phi)
 {
 	pthread_mutex_lock(&phi->mr_fork);
 	pthread_mutex_lock(phi->ml_fork);
-	ft_print("has taken a fork", phi);
-	ft_print("has taken a fork", phi);
+	ft_print("has taken a fork", phi, 0);
+	ft_print("has taken a fork", phi, 0);
 	pthread_mutex_lock(&phi->m_t_die);
 	phi->t_die = ft_time() - phi->data->t_start + phi->data->t_die;
 	phi->eating = 1;
 	pthread_mutex_unlock(&phi->m_t_die);
-	ft_print("is eating", phi);
+	ft_print("is eating", phi, 0);
 	ft_usleep(phi->data->t_eat);
 	phi->left_eat--;
 	if (phi->left_eat == 0)
@@ -72,9 +72,9 @@ void	many_routine(t_philo *phi)
 	phi->eating = 0;
 	pthread_mutex_unlock(&phi->mr_fork);
 	pthread_mutex_unlock(phi->ml_fork);
-	ft_print("is sleeping", phi);
+	ft_print("is sleeping", phi, 0);
 	ft_usleep(phi->data->t_sleep);
-	ft_print("is thinking", phi);
+	ft_print("is thinking", phi, 0);
 }
 
 void	monitor(t_data *data)
@@ -90,10 +90,11 @@ void	monitor(t_data *data)
 		pthread_mutex_unlock(&data->phi[i].m_t_die);
 		if (time <= (ft_time() - data->t_start))
 		{
-			ft_print("died", &data->phi[i]);
+		//	ft_print("died", &data->phi[i]);
 			pthread_mutex_lock(&data->mend);
 			data->end = 1;
 			pthread_mutex_unlock(&data->mend);
+			ft_print("died", &data->phi[i], 1);
 			break ;
 		}
 		if (data->n_must_eat > 0 && monitor_eaten(data))

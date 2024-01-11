@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 18:36:05 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/10 20:24:55 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/11 18:00:34 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	ft_usleep(int millisec);
 int		ft_atoi_philo(char *str, int *arg);
 int		error(char *message, t_data *data, int flag);
 void	ft_clean(t_data *data, int flag);
-void	ft_print(char *message, t_philo *phi);
+void	ft_print(char *message, t_philo *phi, int flag);
 /****************************************/
 
 #endif
