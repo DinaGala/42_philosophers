@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 18:05:16 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/11 18:07:36 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/11 19:02:51 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ void	*one_routine(t_philo *phi)
 	pthread_mutex_lock(&phi->mr_fork);
 	ft_print("has taken a fork", phi, 0);
 	ft_usleep(phi->t_die);
-	ft_print("died", phi, 1);
-	phi->data->end = 1;
 	pthread_mutex_unlock(&phi->mr_fork);
 	return ((void *)0);
 }
@@ -88,9 +86,8 @@ void	monitor(t_data *data)
 		pthread_mutex_lock(&data->phi[i].m_t_die);
 		time = data->phi[i].t_die;
 		pthread_mutex_unlock(&data->phi[i].m_t_die);
-		if (time <= (ft_time() - data->t_start))
+		if (time <= (ft_time() - data->t_start) && !data->phi[i].eating)
 		{
-		//	ft_print("died", &data->phi[i]);
 			pthread_mutex_lock(&data->mend);
 			data->end = 1;
 			pthread_mutex_unlock(&data->mend);

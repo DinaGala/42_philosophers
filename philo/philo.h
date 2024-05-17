@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 18:36:05 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/01/11 18:00:34 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/01/11 19:02:14 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_philo
 	pthread_mutex_t	mr_fork;
 	pthread_mutex_t	*ml_fork;
 	pthread_mutex_t	m_t_die;
-	t_data	*data;
+	t_data			*data;
 }	t_philo;
 
 typedef struct s_data
@@ -47,7 +47,6 @@ typedef struct s_data
 	int				eaten;
 	t_philo			*phi;
 	pthread_t		*threads;
-	struct timeval	time; //?
 	pthread_mutex_t	mprint;
 	pthread_mutex_t	mstart;
 	pthread_mutex_t	mend;
