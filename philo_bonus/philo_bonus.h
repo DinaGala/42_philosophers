@@ -6,12 +6,12 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 18:36:05 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/05/19 18:55:08 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/05/19 20:53:20 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
 # include <pthread.h>
 # include <stdlib.h>
@@ -35,7 +35,7 @@ typedef struct s_philo
 	int				eating;
 	int				t_die;
 	pthread_t		teat;
-	t_data			*data;     
+	t_data			*data;
 }	t_philo;
 
 typedef struct s_data
@@ -50,11 +50,8 @@ typedef struct s_data
 	int				eaten;
 	t_philo			*phi;
 	pid_t			*pids;
-	sem_t	*sprint;
-	sem_t	*sstart;
-//	sem_t	send;
-//	sem_t	seaten;
-	sem_t	*sforks;
+	sem_t			*sprint;
+	sem_t			*sforks;
 }	t_data;
 
 /*********** philo.c - main and initialization *************/

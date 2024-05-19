@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 21:11:54 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/05/19 19:51:59 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/05/19 20:54:47 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,10 @@ int	init_pids(t_data *data)
 		if (pid < 0)
 			return (i);
 		if (pid == 0)
-			philo_routine(&data->phi[i]); // not written yet
+			philo_routine(&data->phi[i]);
 		else
 			data->pids[i] = pid;
 	}
-//	sem_post(data->sstart);
 	return (data->n_phis);
 }
 
@@ -95,7 +94,6 @@ int	parse_args(t_data *data, char **argv)
 int	main(int argc, char **argv)
 {
 	t_data	data;
-	
 
 	if (argc < 5 || argc > 6)
 	{

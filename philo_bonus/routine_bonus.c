@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 18:05:16 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/05/19 20:08:50 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/05/19 20:54:02 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 int	philo_routine(t_philo *phi)
 {
-	phi->t_die = phi->data->t_die;
 	if (pthread_create(&phi->teat, NULL, &monitor, phi))
-			ft_exit("error creatng thread", phi, 2); //kill everyone here, exit code - error creating threads
+		ft_exit("error creatng thread", phi, 2);
 	pthread_detach(phi->teat);
-	if (phi->id % 2 == 0)
+	if (phi->id > phi->data->n_phis / 2)
 		ft_usleep(1);
 	while (24)
 	{
@@ -31,7 +30,7 @@ int	philo_routine(t_philo *phi)
 int	one_philo_die(t_data *data)
 {
 	int	time;
-	
+
 	data->t_start = ft_time();
 	printf("%i %s\n", 0, "1 has taken a fork");
 	ft_usleep(data->t_die);
@@ -45,19 +44,15 @@ void	try_to_eat(t_philo *phi)
 {
 	sem_wait(phi->data->sforks);
 	sem_wait(phi->data->sforks);
-	ft_print("has taken a fork", phi, 0);
-	ft_print("has taken a fork", phi, 0);
-//	phi->eating = 1;
-	ft_print("is eating", phi, 0);
 	phi->t_die = ft_time() - phi->data->t_start + phi->data->t_die;
+	ft_print("has taken a fork", phi, 0);
+	ft_print("has taken a fork", phi, 0);
+	ft_print("is eating", phi, 0);
 	ft_usleep(phi->data->t_eat);
 	sem_post(phi->data->sforks);
 	sem_post(phi->data->sforks);
-//	ft_print("put down a fork", phi, 0);
-//	ft_print("put down a fork", phi, 0);
 	if (--phi->left_eat == 0)
 		exit (0);
-//	phi->eating = 0;
 }
 
 void	*monitor(void *arg)
@@ -68,7 +63,7 @@ void	*monitor(void *arg)
 	while (24)
 	{
 		if (phi->t_die <= (ft_time() - phi->data->t_start))
-			ft_exit("has died", phi, 1); // exit code - died
+			ft_exit("has died", phi, 1);
 		ft_usleep(1);
 	}
 	return ((void *)0);
@@ -76,8 +71,6 @@ void	*monitor(void *arg)
 
 void	try_to_sleep_and_think(t_philo *phi)
 {
-//	int	time;
-
 	ft_print("is sleeping", phi, 0);
 	ft_usleep(phi->data->t_sleep);
 	ft_print("is thinking", phi, 0);
