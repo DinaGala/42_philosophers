@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 18:36:05 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/05/17 19:38:53 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/05/19 18:55:08 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/time.h>
+# include <sys/wait.h>
 # include <string.h>
 # include <fcntl.h>
 # include <sys/stat.h> 
 # include <semaphore.h>
+# include <signal.h>
 
 typedef struct s_data	t_data;
 typedef struct s_philo	t_philo;
@@ -32,7 +34,8 @@ typedef struct s_philo
 	int				left_eat;
 	int				eating;
 	int				t_die;
-	t_data			*data;
+	pthread_t		teat;
+	t_data			*data;     
 }	t_philo;
 
 typedef struct s_data
@@ -46,17 +49,17 @@ typedef struct s_data
 	int				end;
 	int				eaten;
 	t_philo			*phi;
-	pid_t		*pids;
-	sem_t	sprint;
-	sem_t	sstart;
-	sem_t	send;
-	sem_t	seaten;
-	sem_t	sforks;
+	pid_t			*pids;
+	sem_t	*sprint;
+	sem_t	*sstart;
+//	sem_t	send;
+//	sem_t	seaten;
+	sem_t	*sforks;
 }	t_data;
 
 /*********** philo.c - main and initialization *************/
 int		parse_args(t_data *data, char **argv);
-int		init_all(t_data *data);
+int		init_all(t_data *data, int check);
 void	init_philos(t_data *data);
 int		init_threads(t_data *data);
 /****************************************/
@@ -65,12 +68,8 @@ int		init_threads(t_data *data);
 int		philo_routine(t_philo *phi);
 int		one_philo_die(t_data *data);
 void	try_to_eat(t_philo *phi);
-void	try_to_sleep(t_philo *phi);
-void	think(t_philo *phi);
-
-void	many_routine(t_philo *phi);
-void	monitor(t_data *data);
-int		monitor_eaten(t_data *data);
+void	*monitor(void	*arg);
+void	try_to_sleep_and_think(t_philo *phi);
 /****************************************/
 
 /*********** time.c - main ***************/
@@ -82,11 +81,13 @@ int		ft_atoi_philo(char *str, int *arg);
 int		error(char *message, t_data *data, int flag);
 void	ft_clean(t_data *data, int flag);
 void	ft_print(char *message, t_philo *phi, int flag);
+int		ft_exit(char *message, t_philo *phi, int stat);
 /****************************************/
 
 /*********** semaphores.c - sem functions *************/
 void	init_sem(t_data *data);
 void	end_sem(t_data *data);
+void	wait_everyone(t_data *data);
 /****************************************/
 
 #endif

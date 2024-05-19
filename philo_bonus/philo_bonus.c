@@ -6,7 +6,7 @@
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 21:11:54 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/05/17 19:00:54 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/05/19 19:51:59 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,22 @@
 
 int	init_pids(t_data *data)
 {
-	int	i;
+	int		i;
+	pid_t	pid;
 
 	i = -1;
+	data->t_start = ft_time();
 	while (++i < data->n_phis)
 	{
-		data->pids[i] = fork();
-		if (data->pids[i] < 0)
+		pid = fork();
+		if (pid < 0)
 			return (i);
-		if (data->pids[i] == 0)
+		if (pid == 0)
 			philo_routine(&data->phi[i]); // not written yet
+		else
+			data->pids[i] = pid;
 	}
+//	sem_post(data->sstart);
 	return (data->n_phis);
 }
 
@@ -38,7 +43,7 @@ void	init_philos(t_data *data)
 		data->phi[i].id = i + 1;
 		data->phi[i].left_eat = data->n_must_eat;
 		data->phi[i].eating = 0;
-		data->phi[i].t_die = data->t_die; //?
+		data->phi[i].t_die = data->t_die;
 		data->phi[i].data = data;
 	}
 }
@@ -55,8 +60,7 @@ int	init_all(t_data *data, int check)
 	init_philos(data);
 	check = init_pids(data);
 	if (check != data->n_phis)
-		return (error("Error when creating threads", data, check));
-	data->t_start = ft_time();
+		return (error("Error when creating pids", data, check));
 	return (0);
 }
 
@@ -79,10 +83,10 @@ int	parse_args(t_data *data, char **argv)
 	if (argv[i] && ft_atoi_philo(argv[i], &data->n_must_eat))
 		return (error("Introduce right times \
 		each philosopher must eat", data, -1));
-	if (data->n_phis == 1)
-		return (one_philo_die(data));
 	if (data->n_must_eat == 0)
 		return (1);
+	if (data->n_phis == 1)
+		return (one_philo_die(data));
 	data->end = 0;
 	data->eaten = 0;
 	return (0);
@@ -91,7 +95,7 @@ int	parse_args(t_data *data, char **argv)
 int	main(int argc, char **argv)
 {
 	t_data	data;
-	int		i;
+	
 
 	if (argc < 5 || argc > 6)
 	{
@@ -104,13 +108,7 @@ int	main(int argc, char **argv)
 		return (1);
 	if (init_all(&data, -1))
 		return (1);
-	monitor(&data);
-	i = -1;
-	while (++i < data.n_phis)
-	{
-		if (pthread_join(data.threads[i], NULL))
-			return (error("Error when joining threads", &data, data.n_phis));
-	}
+	wait_everyone(&data);
 	ft_clean(&data, data.n_phis);
 	return (0);
 }

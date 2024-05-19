@@ -6,16 +6,17 @@
 #    By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/05 17:30:59 by nzhuzhle          #+#    #+#              #
-#    Updated: 2024/05/17 17:18:36 by nzhuzhle         ###   ########.fr        #
+#    Updated: 2024/05/19 20:06:40 by nzhuzhle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 HEADER = philo_bonus.h
 NAME = philo_bonus
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -MMD -pthread -I ./
+CFLAGS = -Wall -Wextra -Werror -MMD -pthread -I ./  #-fsanitize=thread
 
-SRCS = philo_bonus.c semaphores.c routine.c time.c utils.c
+SRCS = philo_bonus.c semaphores_bonus.c routine_bonus.c time_bonus.c \
+utils_bonus.c
 
 OBJ = $(SRCS:.c=.o) 
 DEPS = $(SRCS:.c=.d)

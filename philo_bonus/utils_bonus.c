@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nzhuzhle <nzhuzhle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 19:05:17 by nzhuzhle          #+#    #+#             */
-/*   Updated: 2024/05/17 17:51:04 by nzhuzhle         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:52:13 by nzhuzhle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,22 @@ void	ft_clean(t_data *data, int flag)
 	while (++i < flag)
 		kill(data->pids[i], SIGKILL);
 	free(data->pids);
+	exit (1);
 }
 
 void	ft_print(char *message, t_philo *phi, int flag)
 {
 	int	time;
-	int	end;
 
-	sem_wait(&phi->data->sprint);
+	sem_wait(phi->data->sprint);
 	time = ft_time() - phi->data->t_start;
-///	pthread_mutex_lock(&phi->data->mend);
-//	end = phi->data->end;
-//	pthread_mutex_unlock(&phi->data->mend);
-	if (!end || flag)
-		printf("%i %i %s\n", time, phi->id, message);
-	sem_post(&phi->data->sprint);
+	printf("%i %i %s\n", time, phi->id, message);
+	if (!flag)
+		sem_post(phi->data->sprint);
+}
+
+int	ft_exit(char *message, t_philo *phi, int stat)
+{
+	ft_print(message, phi, 1);
+	exit (stat);
 }
